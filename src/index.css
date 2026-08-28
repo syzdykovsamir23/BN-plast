@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bn-blue: #002461;
+  --color-bn-blue-2: #0a2f7a;
+  --color-bn-blue-soft: #eaf0fb;
+  --color-bn-ink: #0b1220;
+  --color-bn-steel: #3a4250;
+  --color-bn-mute: #6b7280;
+  --color-bn-line: #e6ebf3;
+  --color-bn-bg: #f6f8fc;
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", "IBM Plex Sans", sans-serif;
+  --font-cond: "Barlow Condensed", "Archivo", sans-serif;
+  --font-hand: "Caveat", cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-bn-ink);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Deep blue wordmark */
+.bn-word-blue {
+  color: #002461;
+  letter-spacing: -0.03em;
+}
+
+/* Dark metallic "Plast" — matches logo wordmark */
+.bn-word-metal {
+  background: linear-gradient(
+    180deg,
+    #6a7280 0%,
+    #2f3542 28%,
+    #0e1218 55%,
+    #2b3340 78%,
+    #55606e 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  letter-spacing: -0.03em;
+  text-shadow: none;
+  position: relative;
+}
+.bn-word-metal::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  pointer-events: none;
+}
+
+/* Handwritten emphasis */
+.handwritten {
+  font-family: var(--font-hand);
+  color: #002461;
+  position: relative;
+  display: inline-block;
+  padding: 0 0.15em 0.05em;
+}
+.handwritten::after {
+  content: "";
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  bottom: 0.05em;
+  height: 6px;
+  background: #002461;
+  border-radius: 999px;
+  transform: skewX(-8deg) scaleY(0.6);
+  opacity: 0.85;
+}
+
+/* Blueprint grid backdrop */
+.grid-bp {
+  background-image:
+    linear-gradient(rgba(0,36,97,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,36,97,0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.diag-stripes {
+  background-image: repeating-linear-gradient(
+    135deg,
+    #002461 0px,
+    #002461 8px,
+    transparent 8px,
+    transparent 20px
+  );
+}
+
+/* Section number chip */
+.sec-chip {
+  font-family: var(--font-cond);
+  letter-spacing: 0.24em;
+  font-weight: 600;
+  color: #002461;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+/* Card hover */
+.cat-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.cat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px rgba(0, 36, 97, 0.35);
+  border-color: #002461;
+}
+
+/* Marquee for partners */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+/* Sticky nav shadow when scrolled */
+.nav-shadow {
+  box-shadow: 0 6px 24px -18px rgba(0, 36, 97, 0.35);
+}
+
+/* Corner ticks */
+.corner-ticks::before,
+.corner-ticks::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #002461;
+}
+.corner-ticks::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.corner-ticks::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
