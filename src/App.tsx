@@ -13,7 +13,12 @@ import {
   X,
   Clock,
   Award,
+  Info,
+  Package,
 } from "lucide-react";
+import ThermoBridgeModal from "./components/modals/ThermoBridgeModal";
+import PVCProductsModal from "./components/modals/PVCProductsModal";
+import SpacerModal from "./components/modals/SpacerModal";
 
 const LOGO_URL = "https://bn-plast-assets.vercel.app/logo-bn-plast.png";
 const TRUCK_URL = "https://bn-plast-assets.vercel.app/delivery-truck-bn-plast.png";
@@ -29,26 +34,33 @@ const NAV = [
   { id: "contacts", label: "Контакты" },
 ];
 
-const PRODUCTION_ITEMS = [
+type ProductionKey = "thermo" | "pvc" | "spacer";
+
+const PRODUCTION_ITEMS: {
+  key: ProductionKey;
+  icon: typeof Layers;
+  title: string;
+  desc: string;
+  wide?: boolean;
+}[] = [
   {
+    key: "thermo",
     icon: Layers,
-    title: "ПВХ ТЕРМОМОСТЫ",
+    title: "ПВХ термомосты",
     desc: "под любые стеклопакеты",
   },
   {
-    icon: ShieldCheck,
-    title: "ПВХ торцевые заглушки",
-    desc: "всех размеров",
+    key: "pvc",
+    icon: Package,
+    title: "ПВХ изделия",
+    desc: "уплотнитель ригеля, терморазрыв, полиамидный профиль",
+    wide: true,
   },
   {
+    key: "spacer",
     icon: Factory,
-    title: "ПВХ москитный шнур",
-    desc: "СТАНДАРТ",
-  },
-  {
-    icon: Layers,
     title: "Алюминиевая дистанционная рамка",
-    desc: "СПЕЙСЕР — под любые стеклопакеты",
+    desc: "СПЕЙСЕР, под любые стеклопакеты",
   },
 ];
 
@@ -392,6 +404,8 @@ function Hero() {
 
 /* ---------------- PRODUCTION ---------------- */
 function Production() {
+  const [openModal, setOpenModal] = useState<ProductionKey | null>(null);
+
   return (
     <section id="production" className="relative py-20 md:py-28 bg-[color:var(--color-bn-bg)] border-y border-[color:var(--color-bn-line)]">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
@@ -408,33 +422,52 @@ function Production() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {PRODUCTION_ITEMS.map((it, idx) => {
             const Icon = it.icon;
             return (
-              <div
-                key={idx}
-                className="group relative bg-white border border-[color:var(--color-bn-line)] p-6 hover:border-[color:var(--color-bn-blue)] transition"
+              <button
+                key={it.key}
+                type="button"
+                onClick={() => setOpenModal(it.key)}
+                aria-label={`Подробнее — ${it.title}`}
+                className={`group relative text-left bg-white border border-[color:var(--color-bn-line)] p-6 md:p-7 cursor-pointer transition-all duration-300 hover:border-[color:var(--color-bn-blue)] hover:shadow-[0_20px_40px_-20px_rgba(0,36,97,0.35)] hover:-translate-y-1 flex flex-col ${
+                  it.wide ? "md:col-span-2" : "md:col-span-1"
+                }`}
               >
                 <div className="absolute top-4 right-4 font-[family-name:var(--font-cond)] text-sm tracking-widest text-[color:var(--color-bn-mute)]">
                   0{idx + 1}
                 </div>
-                <div className="w-12 h-12 rounded-lg bg-[color:var(--color-bn-blue-soft)] text-[color:var(--color-bn-blue)] flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-lg bg-[color:var(--color-bn-blue-soft)] text-[color:var(--color-bn-blue)] flex items-center justify-center mb-6 group-hover:bg-[color:var(--color-bn-blue)] group-hover:text-white transition">
                   <Icon className="w-6 h-6" strokeWidth={2.2} />
                 </div>
-                <div className="font-[family-name:var(--font-display)] font-extrabold text-lg leading-tight text-[color:var(--color-bn-ink)]">
+                <div className="font-[family-name:var(--font-display)] font-extrabold text-lg md:text-xl leading-tight text-[color:var(--color-bn-ink)]">
                   {it.title}
                 </div>
-                <div className="mt-1 text-sm text-[color:var(--color-bn-steel)]">
+                <div className="mt-1.5 text-sm md:text-base text-[color:var(--color-bn-steel)]">
                   {it.desc}
                 </div>
-                <div className="mt-6 pt-4 border-t border-dashed border-[color:var(--color-bn-line)] flex items-center gap-2 text-xs uppercase tracking-widest text-[color:var(--color-bn-blue)] font-semibold">
-                  <CheckCircle2 className="w-4 h-4" /> В наличии
+
+                <div className="flex-1" />
+
+                <div className="mt-6 pt-4 border-t border-dashed border-[color:var(--color-bn-line)] flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[color:var(--color-bn-blue)] font-semibold">
+                    <CheckCircle2 className="w-4 h-4" /> В наличии
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-bn-ink)] group-hover:text-[color:var(--color-bn-blue)] transition">
+                    <Info className="w-4 h-4" strokeWidth={2.4} />
+                    Подробнее
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" strokeWidth={2.4} />
+                  </span>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
+
+        <ThermoBridgeModal open={openModal === "thermo"} onClose={() => setOpenModal(null)} />
+        <PVCProductsModal open={openModal === "pvc"} onClose={() => setOpenModal(null)} />
+        <SpacerModal open={openModal === "spacer"} onClose={() => setOpenModal(null)} />
 
         {/* Trust bar */}
         <div className="mt-14 relative overflow-hidden rounded-2xl bg-[color:var(--color-bn-blue)] text-white">
